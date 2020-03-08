@@ -1,21 +1,25 @@
 import React from "react";
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image,Keyboard, TouchableWithoutFeedback } from 'react-native';
 // import { Button } from "native-base";
 import {MaterialCommunityIcons} from '@expo/vector-icons';
 import { Container, Content } from "native-base";
 import SearchHeader from "../SearchHeader";
 import SearchBody from "../SearchBody";
 import Axios from "axios";
+import Loading from "../../shared/Loading";
+
 class SearchTab extends React.Component {
     state={
         searchBeer : '',
         searchData : {},
         imageSource :'',
-        drinkFound : false
+        drinkFound : false,
+        loading: false
     }
 
     beerSearch = ()=>{
         // alert('search for beer')
+        this.setState({loading : true})
         const renameBeer = this.state.searchBeer.toLocaleLowerCase()
         Axios.get(`https://www.thecocktaildb.com/api/json/v1/1/search.php?i=${renameBeer}`)
         .then((val)=>{
@@ -24,7 +28,8 @@ class SearchTab extends React.Component {
                 this.setState({
                     searchData : val.data.ingredients[0],
                     drinkFound : true,
-                    imageSource : drinkName
+                    imageSource : drinkName,
+                    loading : false
                 })
             }
             console.log(this.state.searchData, 'ini hasilnya');
@@ -33,6 +38,7 @@ class SearchTab extends React.Component {
             console.log(err);
             this.setState({
                 drinkFound : false,
+                loading : false
             })
 
         })
@@ -41,37 +47,27 @@ class SearchTab extends React.Component {
 
     renderContent = ()=>{
         if (this.state.drinkFound) {
-            return <SearchBody data={this.state.searchData} imageSource={this.state.imageSource}/>
+                return <Content><SearchBody data={this.state.searchData} imageSource={this.state.imageSource}/></Content>
         }else{
-            console.log('drink not found')
+            console.log('drik not found!');
+            return <View style={{ flex: 1, justifyContent : 'center' }}><Text style={{textAlign : "center"}}>drink not found ! search your drink!</Text></View>
+            
         } 
     }
 
     render(){
         return(
             <Container>
+
                 <SearchHeader
                 value={this.state.searchBeer}
                 funcOnChange ={(val)=>this.setState({searchBeer : val})}
                 beerSearch = {this.beerSearch}
                 />
-                <Content>
-                    {this.renderContent()}
-                </Content>
+                    {this.state.loading?  <Loading /> : this.renderContent() }
             </Container>
         )
     }
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex : 1,
-        justifyContent : "center",
-        alignItems : "center",
-        backgroundColor : 'red'
-        
-
-    }
-})
 
 export default SearchTab

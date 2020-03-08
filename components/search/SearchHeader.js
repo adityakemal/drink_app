@@ -15,7 +15,7 @@ class SearchHeader extends React.Component {
                <Item>
                    <Icon name='ios-search'/>
                    <Input
-                    placeholder='Enter beer name!'
+                    placeholder='Enter drink name!'
                     onChangeText ={this.props.funcOnChange}
                     returnKeyType='search'
                     onSubmitEditing={this.props.beerSearch}

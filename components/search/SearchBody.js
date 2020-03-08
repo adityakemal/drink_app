@@ -3,21 +3,21 @@ import { StyleSheet, Text, View, Button, Image } from 'react-native';
 // import { Button } from "native-base";
 import {MaterialCommunityIcons} from '@expo/vector-icons';
 import { Content, ListItem, List } from "native-base";
+import Loading from '../shared/Loading'
 class SearchBody extends React.Component {
     state={
         searchBeer : '',
         searchData : {},
         imageSource :'',
-        drinkFound : false
-    }
-
-   
+        drinkFound : false,
+    }   
     render(){
         const drinkData = this.props.data
         return(
             <Content>
+                {/* <Loading/> */}
                 <List style={{backgroundColor : 'white'}}>
-                    <ListItem itemDivider style={{justifyContent : 'center'}}>
+                    <ListItem itemDinvider style={{justifyContent : 'center'}}>
                         <Image source={{uri : this.props.imageSource}} style={{height: 200, width:200}}/>
                     </ListItem>
                     <ListItem itemDivider>
