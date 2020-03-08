@@ -1,6 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View, Button, Image } from 'react-native';
-// import { Button } from "native-base";
+import { StyleSheet, Text, View, Button, Image,AsyncStorage } from 'react-native';
 import {MaterialCommunityIcons} from '@expo/vector-icons';
 import { Content, ListItem, List } from "native-base";
 import Loading from '../shared/Loading'
@@ -10,8 +9,51 @@ class SearchBody extends React.Component {
         searchData : {},
         imageSource :'',
         drinkFound : false,
-    }   
-    render(){
+        favouriteDatas: [],
+        isFav : false
+    } 
+    componentDidMount (){
+        this.retrieveData()
+    }
+   
+
+    retrieveData = async () => {
+        try {
+            const value = await AsyncStorage.getItem('favouriteDrink');
+            if (value !== null) {
+                // We have data!!
+                const parseData = JSON.parse(value)
+                    this.setState({
+                        favouriteDatas : parseData,
+                        isFav : parseData.some(res => res.name === this.props.data.strIngredient)
+                    })
+                console.log(value, 'HASIL DARI LOCAL STORAGE');
+                console.log(this.state.favouriteDatas, 'STATE DATA ADA');
+            }
+        } catch (error) {
+            // Error retrieving data
+            console.log(this.state.favouriteDatas, 'STATE DATA KOSOG');
+        }
+    };  
+    
+    simpanFavData = async () => {
+        if (this.state.favouriteDatas.length < 0) {
+            var favData = [{key : this.props.data.idIngredient , name : this.props.data.strIngredient}]
+        }else{
+            var favData = [...this.state.favouriteDatas,{key : this.props.data.idIngredient , name : this.props.data.strIngredient}]
+        }
+        var favDataString = JSON.stringify(favData)  
+        try {
+            await AsyncStorage.setItem('favouriteDrink', favDataString);
+            console.log('suksess simpan locl strg');
+            
+            } catch (error) {
+            // Error saving data
+            console.log('GALAT locl strg');
+            }  
+    };
+
+    render(){        
         const drinkData = this.props.data
         return(
             <Content>
@@ -28,7 +70,7 @@ class SearchBody extends React.Component {
                         <View>
                             <Text>{drinkData.strIngredient}</Text>
                         </View>
-                        <Button title='+ Add favourite' />
+                        <Button title='+ Add favourite' disabled={this.state.isFav} onPress={this.simpanFavData} />
                     </ListItem>
                     <ListItem itemDivider>
                         <Text>Type</Text>
