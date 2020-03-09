@@ -1,25 +1,25 @@
 import React from "react";
-import { StyleSheet, Text, View, Image, AsyncStorage } from 'react-native';
-// import { Button } from "native-base";
+import { StyleSheet, Text, View, Image, AsyncStorage, Button } from 'react-native';
 class FavouriteTab extends React.Component {
     state ={
         dataFavourite : [],
     }
     componentDidMount (){
         this.retrieveData()
+        this._unsubscribe = this.props.navigation.addListener('didFocus', () => {
+            // do something
+            this.retrieveData()
+            console.log('MOUNT')
+        });
     }
-    componentDidUpdate(prevProps) {
-    const { navigation } = this.props;
-    this.focusListener = navigation.addListener('didFocus', () => {
-      // The screen is focused
-      // Call any action
-      console.log('====================================');
-      console.log('AKU FOKUUUUUSSS!!');
-      console.log('====================================');
-      this.retrieveData() //ini call api
-    });
+
+    // componentWillUnmount() {
+    //     this._unsubscribe();
+    //     console.log('unmount')
+      
+    //   }
+   
     
-      }
     retrieveData = async () => {
         try {
           const value = await AsyncStorage.getItem('favouriteDrink');
@@ -38,6 +38,13 @@ class FavouriteTab extends React.Component {
         }
     };
 
+    removeData =  () => {
+         
+          this.setState({dataFavourite : []},()=> AsyncStorage.removeItem('favouriteDrink'))
+          console.log( 'sukse hapus LOCAL STORAGEe');
+    };
+
+
     renderContent = ()=>{
         return this.state.dataFavourite.map(res=>{
             return(
@@ -54,6 +61,7 @@ class FavouriteTab extends React.Component {
                 {
                     this.renderContent()
                 }
+                <Button title='remove all' onPress={this.removeData}/>
 
             </View>
         )

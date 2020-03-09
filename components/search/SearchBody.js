@@ -15,7 +15,6 @@ class SearchBody extends React.Component {
     componentDidMount (){
         this.retrieveData()
     }
-   
 
     retrieveData = async () => {
         try {
@@ -46,7 +45,7 @@ class SearchBody extends React.Component {
         try {
             await AsyncStorage.setItem('favouriteDrink', favDataString);
             console.log('suksess simpan locl strg');
-            
+            this.setState({isFav : true})
             } catch (error) {
             // Error saving data
             console.log('GALAT locl strg');

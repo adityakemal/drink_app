@@ -20,13 +20,6 @@ const screens = {
           // title : null
       }
     },
-    faforit: {
-        screen: fav,
-        navigationOptions: {
-          headerShown: false
-          // title : null
-      }
-    }
 }
 const App = createStackNavigator(screens)
 export default createAppContainer(App)
