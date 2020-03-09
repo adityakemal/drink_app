@@ -4,6 +4,7 @@ import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack'
 import HomeScreen from './components/home/HomeScreen'
 import SearchTabNavigator from './components/search/SearchTabNavigator'
+import fav from './components/search/tabnavigator/FavouriteTab'
 
 const screens = {
     HomeScreen: {
@@ -14,6 +15,13 @@ const screens = {
     },
     SearchTabNavigator: {
         screen: SearchTabNavigator,
+        navigationOptions: {
+          headerShown: false
+          // title : null
+      }
+    },
+    faforit: {
+        screen: fav,
         navigationOptions: {
           headerShown: false
           // title : null

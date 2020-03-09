@@ -24,12 +24,31 @@ const SearchTabNavigator = createBottomTabNavigator({
     },
     Favourite : { //nama disini tidak boleh Home
         screen : FavouriveTab,
-        navigationOptions : {
-            tabBarLabel: 'FAVOURITE',
+        navigationOptions: ({ navigation }) => ({
+            tabBarLabel: 'YOUR FAVOURITE DRINK!',
+
+            tabBarOnPress: () => {
+                // console.log('====================================');
+                // console.log(navigation);
+                // console.log('====================================');
+                navigation.navigate('Favourite')
+                // navigation.emit({
+                //     type: 'tabPress',
+                //     target: route.key,
+                //   });
+
+        },
+
             tabBarIcon:({tintColor,focused})=>{
                 return <Ionicons name="ios-beer" color={tintColor}  size={25}/>  
             }  
-        }
+        }),
+        // navigationOptions : {
+        //     tabBarLabel: 'FAVOURITE',
+        //     tabBarIcon:({tintColor,focused})=>{
+        //         return <Ionicons name="ios-beer" color={tintColor}  size={25}/>  
+        //     }  
+        // }
     },
 },{
     tabBarOptions: {
